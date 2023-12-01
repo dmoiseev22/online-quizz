@@ -24,7 +24,7 @@ export default function App(){
             }
             return res.json();
         })
-        .then(data => setQuestions(updateQuestions(data.results)));
+        .then(data => setQuestions(updateQuestions(data.results)))
         .catch(err => console.error('Error:', err));
     }
             
