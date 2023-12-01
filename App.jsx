@@ -6,8 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 
 export default function App(){
-    
-    // CREATE STATE TO HOLD QUESTIONS DATA
+
     const [questions, setQuestions] = React.useState("")
     const [welcomeState, setWelcomeState] = React.useState(true)
     
@@ -16,18 +15,21 @@ export default function App(){
         fetchData()
     }, [])
     
-    // FETCH FUNCTION (!! ADD ERROR HANDLING FUNCTION !!)
-    function fetchData(){
-        fetch('https://opentdb.com/api.php?amount=5&type=multiple')
-        .then(res => res.json())
-        .then(data => setQuestions(updateQuestions(data.results)))
-        .catch(err => console.error(err))
+    // FETCH FUNCTION
+    function fetchData() {
+    fetch('https://opentdb.com/api.php?amount=5&type=multiple')
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Network response was not ok: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => setQuestions(updateQuestions(data.results)));
+        .catch(err => console.error('Error:', err));
     }
-    // ADD ERROR HANDLING FOR FETCH REQUEST
             
     // FUNCTION TO CREATE UPDATED QUESTIONS ARRAY WITH SHUFFLED ANSWERS
     function updateQuestions(data){
-
             return data.map((question)=>{
                 const allAnswersArray = [question.correct_answer, ...question.incorrect_answers]
                 const shuffledAnswersArray = shuffleArray(allAnswersArray)
@@ -59,7 +61,7 @@ export default function App(){
         return data.map((el)=>he.decode(el))
     }
     
-    // RENDERING...... 
+    // RENDERING
     
     return (
         <div className="body">
